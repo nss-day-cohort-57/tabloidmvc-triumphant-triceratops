@@ -161,6 +161,39 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
+
+        public void UpdatePost(Post post)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @" 
+                                UPDATE POST
+                                SET
+                                    Title = @title,
+                                    Content = @content,
+                                    ImageLocation = @imageLocation,
+                                    PublishDateTime = @publishDateTime,
+                                    IsApproved = @isApproved,
+                                    CategoryId = @categoryId,
+                                    UserProfileId = @userProfileId
+                                WHERE Id = @id";
+                    cmd.Parameters.AddWithValue("@title", post.Title);
+                    cmd.Parameters.AddWithValue("@content", post.Content);
+                    cmd.Parameters.AddWithValue("@ImageLocation", DbUtils.ValueOrDBNull(post.ImageLocation));
+                    cmd.Parameters.AddWithValue("@PublishDateTime", DbUtils.ValueOrDBNull(post.PublishDateTime));
+                    cmd.Parameters.AddWithValue("@isApproved", post.IsApproved);
+                    cmd.Parameters.AddWithValue("@categoryId", post.CategoryId);
+                    cmd.Parameters.AddWithValue("@userProfileId", post.UserProfileId);
+                    cmd.Parameters.AddWithValue("@id", post.Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
         public void Delete(int postId)
         {
             using (SqlConnection conn = Connection)
@@ -178,7 +211,8 @@ namespace TabloidMVC.Repositories
             }
         }
 
-                private Post NewPostFromReader(SqlDataReader reader)
+
+        private Post NewPostFromReader(SqlDataReader reader)
         {
             return new Post()
             {
@@ -215,3 +249,4 @@ namespace TabloidMVC.Repositories
         }
     }
 }
+
