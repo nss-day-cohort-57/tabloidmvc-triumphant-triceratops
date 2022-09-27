@@ -63,6 +63,7 @@ namespace TabloidMVC.Repositories
                     cmd.CommandText = @"
                                         INSERT  INTO UserProfile (DisplayName, FirstName, LastName, Email, CreateDateTime, ImageLocation, UserTypeId)
                                        OUTPUT INSERTED.ID
+                                       
                                         VALUES (@displayName, @firstName, @LastName, @email, @createDateTime, @imageLocation, @userTypeId);";
                     cmd.Parameters.AddWithValue("@displayName", profile.DisplayName);
                     cmd.Parameters.AddWithValue("@firstName", profile.FirstName);
@@ -70,7 +71,7 @@ namespace TabloidMVC.Repositories
                     cmd.Parameters.AddWithValue("@email", profile.Email);
                     cmd.Parameters.AddWithValue("@createDateTime", profile.CreateDateTime);
                     cmd.Parameters.AddWithValue("@imageLocation", profile.ImageLocation);
-                    cmd.Parameters.AddWithValue("@userTypeId", profile.UserTypeId);
+                    cmd.Parameters.AddWithValue("@userTypeId", 2);
 
                     int id = (int)cmd.ExecuteScalar();
 
