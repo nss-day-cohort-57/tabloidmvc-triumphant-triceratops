@@ -95,10 +95,10 @@ namespace TabloidMVC.Controllers
             }
         }
 
-        public IActionResult UserIndex(int userProfileId)
+        public IActionResult UserIndex()
         {
-            
-            var posts = _postRepository.GetAllPostsByUserId(userProfileId);
+            var id = GetCurrentUserProfileId();
+            var posts = _postRepository.GetAllPostsByUserId(id);
             return View(posts);
         }
     }

@@ -251,12 +251,35 @@ namespace TabloidMVC.Repositories
                             Post post = new Post
                             {
                                 Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                                Title = reader.GetString(reader.GetOrdinal("Name")),
-                                Content = reader.GetString(reader.GetOrdinal("ImageUrl")),
-                                ImageLocation = reader.GetString(reader.GetOrdinal("ImageLocation")),
+                                Title = reader.GetString(reader.GetOrdinal("Title")),
+                                Content = reader.GetString(reader.GetOrdinal("Content")),
+                                ImageLocation = DbUtils.GetNullableString(reader, "HeaderImage"),
                                 CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
-                                PublishDateTime = reader.GetDateTime(reader.GetOrdinal("PublishDateTime")),
-                                IsApproved = reader.GetBoolean(reader.GetOrdinal("IsApproved"))
+                                PublishDateTime = DbUtils.GetNullableDateTime(reader, "PublishDateTime"),
+                                IsApproved = reader.GetBoolean(reader.GetOrdinal("IsApproved")),
+                                CategoryId = reader.GetInt32(reader.GetOrdinal("CategoryId")),
+                                Category = new Category()
+                                {
+                                    Id = reader.GetInt32(reader.GetOrdinal("CategoryId")),
+                                    Name = reader.GetString(reader.GetOrdinal("CategoryName"))
+                                },
+                                UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
+                                UserProfile = new UserProfile()
+                                {
+                                    Id = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
+                                    FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                    LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                                    DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
+                                    Email = reader.GetString(reader.GetOrdinal("Email")),
+                                    CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
+                                    ImageLocation = DbUtils.GetNullableString(reader, "AvatarImage"),
+                                    UserTypeId = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
+                                    UserType = new UserType()
+                                    {
+                                        Id = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
+                                        Name = reader.GetString(reader.GetOrdinal("UserTypeName"))
+                                    }
+                                }
                             };
 
                             posts.Add(post);
