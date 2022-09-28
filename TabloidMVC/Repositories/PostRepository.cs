@@ -6,6 +6,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using TabloidMVC.Models;
 using TabloidMVC.Utils;
+using TabloidMVC.Models.ViewModels;
 
 namespace TabloidMVC.Repositories
 {
