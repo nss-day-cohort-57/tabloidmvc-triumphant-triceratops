@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
@@ -62,7 +65,7 @@ namespace TabloidMVC.Controllers
                 _postRepository.Add(vm.Post);
 
                 return RedirectToAction("Details", new { id = vm.Post.Id });
-            } 
+            }
             catch
             {
                 vm.CategoryOptions = _categoryRepository.GetAll();
@@ -95,11 +98,46 @@ namespace TabloidMVC.Controllers
             }
         }
 
+
         public IActionResult UserIndex()
         {
             var id = GetCurrentUserProfileId();
             var posts = _postRepository.GetAllPostsByUserId(id);
             return View(posts);
         }
+
+            public IActionResult Edit(int id)
+            {
+                var viewModel = new PostCreateViewModel();
+                viewModel.Post = _postRepository.GetPublishedPostById(id);
+                viewModel.CategoryOptions = _categoryRepository.GetAll().ToList();
+
+                if (viewModel.Post == null)
+                {
+                    return NotFound();
+                }
+                return View(viewModel);
+            }
+
+            [HttpPost]
+            public IActionResult Edit(PostCreateViewModel viewModel, int id)
+            {
+                try
+                {
+                    viewModel.Post.Id = id;
+                    viewModel.Post.CreateDateTime = DateAndTime.Now;
+                    viewModel.Post.IsApproved = true;
+                    viewModel.Post.UserProfileId = GetCurrentUserProfileId();
+
+                    _postRepository.UpdatePost(viewModel.Post);
+                    return RedirectToAction("Details", new { id = viewModel.Post.Id });
+                }
+                catch
+                {
+                    viewModel.CategoryOptions = _categoryRepository.GetAll();
+                    return View(viewModel);
+                }
+            }
+        
     }
 }
