@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 using System;
@@ -35,6 +37,11 @@ namespace TabloidMVC.Controllers
             var Categories = _categoryRepository.GetAll();
             return View(cat);
         }
+        public ActionResult Details(int id)
+        {
+            return View();
+        }
+
 
         [HttpPost]
         public IActionResult Create(Category category)
@@ -52,8 +59,58 @@ namespace TabloidMVC.Controllers
                 return View();
             }
         }
+
+        public ActionResult Edit(int id)
+        {
+            Category category = _categoryRepository.GetCategoryById(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return View(category);
+        }
+
+      
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, Category category)
+        {
+            try
+            {
+                _categoryRepository.UpdateCategory(category);
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View(category);
+            }
+        }
+
+
+        public ActionResult Delete(int id)
+        {
+            Category category = _categoryRepository.GetCategoryById(id);
+            return View(category);
+        }
+
+       
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, Category category)
+        {
+            try
+            {
+                _categoryRepository.DeleteCategory(id);
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View(category);
+            }
+        }
     }
 }
+
 
   
         
