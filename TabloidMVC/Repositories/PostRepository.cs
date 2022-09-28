@@ -225,7 +225,7 @@ namespace TabloidMVC.Repositories
                     cmd.CommandText = @"
                          SELECT p.Id, p.Title, p.Content, 
                               p.ImageLocation AS HeaderImage,
-                              p.CreateDateTime, p.PublishDateTime, p.IsApproved,
+                              p.CreateDateTime AS PostCreateDateTime, p.PublishDateTime, p.IsApproved,
                               p.CategoryId, p.UserProfileId,
                               c.[Name] AS CategoryName,
                               u.FirstName, u.LastName, u.DisplayName, 
@@ -237,7 +237,8 @@ namespace TabloidMVC.Repositories
                               LEFT JOIN UserProfile u ON p.UserProfileId = u.id
                               LEFT JOIN UserType ut ON u.UserTypeId = ut.id
                          WHERE IsApproved = 1 AND PublishDateTime < SYSDATETIME()
-                              AND p.UserProfileId = @userProfileId";
+                              AND p.UserProfileId = @userProfileId
+                         ORDER BY p.CreateDateTime DESC" ;
 
 
                     cmd.Parameters.AddWithValue("@userProfileId", userProfileId);
@@ -254,7 +255,7 @@ namespace TabloidMVC.Repositories
                                 Title = reader.GetString(reader.GetOrdinal("Title")),
                                 Content = reader.GetString(reader.GetOrdinal("Content")),
                                 ImageLocation = DbUtils.GetNullableString(reader, "HeaderImage"),
-                                CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
+                                CreateDateTime = reader.GetDateTime(reader.GetOrdinal("PostCreateDateTime")),
                                 PublishDateTime = DbUtils.GetNullableDateTime(reader, "PublishDateTime"),
                                 IsApproved = reader.GetBoolean(reader.GetOrdinal("IsApproved")),
                                 CategoryId = reader.GetInt32(reader.GetOrdinal("CategoryId")),
