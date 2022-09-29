@@ -63,6 +63,7 @@ namespace TabloidMVC.Controllers
             try
             {
                 comment.CreateDateTime = DateTime.Now;
+                comment.UserProfileId = new UserProfile() { Id = GetCurrentUserProfileId() };
                 comment.PostId = id;
                 _commentRepository.Add(comment);
 

@@ -43,9 +43,11 @@ namespace TabloidMVC.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                                        SELECT c.Id, c.Subject, c.Content, c.CreateDateTime, c.UserProfileId
+                                       SELECT c.Id, Subject, Content, c.CreateDateTime, u.DisplayName
                                         FROM Comment c
-                                        JOIN UserProfile u on u.Id = c.UserProfileId WHERE c.PostId = @postId";
+                                        JOIN UserProfile u on u.Id = c.UserProfileId
+                                        WHERE c.PostId = @postId
+                                        ORDER BY c.CreateDateTime DESC";
                     cmd.Parameters.AddWithValue("@postId", postId);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
@@ -60,7 +62,10 @@ namespace TabloidMVC.Repositories
                                 Subject = reader.GetString(reader.GetOrdinal("Subject")),
                                 Content = reader.GetString(reader.GetOrdinal("Content")),
                                 CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
-                                UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId"))
+                                UserProfileId = new UserProfile()
+                                {
+                                    DisplayName = reader.GetString(reader.GetOrdinal("DisplayName"))
+                                }
                             };
 
                             comments.Add(comment);
