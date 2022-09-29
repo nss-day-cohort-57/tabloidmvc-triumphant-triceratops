@@ -63,11 +63,10 @@ namespace TabloidMVC.Controllers
             try
             {
                 comment.CreateDateTime = DateTime.Now;
-                
-
+                comment.PostId = id;
                 _commentRepository.Add(comment);
 
-                return RedirectToAction("Details", "Post", new { id = comment.PostId });
+                return RedirectToAction("Details", "Post",   new { id = comment.PostId });
             }
             catch
             {
