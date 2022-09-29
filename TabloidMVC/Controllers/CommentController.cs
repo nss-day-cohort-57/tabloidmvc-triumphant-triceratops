@@ -29,14 +29,8 @@ namespace TabloidMVC.Controllers
             // GET: CommentController
         public ActionResult Index(int id)
         {
-            Post post = _postRepository.GetPublishedPostById(id);
-            ViewCommentViewModel vm = new ViewCommentViewModel()
-            {
-                PostId = post.Id,
-                PostTitle = post.Title,
-                Comment = _commentRepository.GetCommentsByPostId(id)
-            };
-            return View(vm);
+            List<Comment> comments = _commentRepository.GetCommentsByPostId(id);
+            return View(comments);
         }
 
         // GET: CommentController/Details/5
@@ -55,6 +49,11 @@ namespace TabloidMVC.Controllers
             return View(comment);
         }
 
+        private int GetCurrentUserProfileId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
+        }
         // POST: CommentController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -63,11 +62,12 @@ namespace TabloidMVC.Controllers
             try
             {
                 comment.CreateDateTime = DateTime.Now;
-                comment.UserProfileId = new UserProfile() { Id = GetCurrentUserProfileId() };
+
+                comment.UserProfileId = GetCurrentUserProfileId();
                 comment.PostId = id;
                 _commentRepository.Add(comment);
 
-                return RedirectToAction("Details", "Post",   new { id = comment.PostId });
+                return RedirectToAction("Index", new { id = comment.PostId });
             }
             catch
             {

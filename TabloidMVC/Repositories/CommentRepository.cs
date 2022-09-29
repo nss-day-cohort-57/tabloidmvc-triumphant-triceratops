@@ -43,9 +43,10 @@ namespace TabloidMVC.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                                       SELECT c.Id, Subject, Content, c.CreateDateTime, u.DisplayName
+                                       SELECT c.Id, Subject, c.Content, c.CreateDateTime, u.DisplayName, p.Title, p.Content AS PostContent, c.UserProfileId
                                         FROM Comment c
                                         JOIN UserProfile u on u.Id = c.UserProfileId
+                                        JOIN Post p on p.Id = c.PostId
                                         WHERE c.PostId = @postId
                                         ORDER BY c.CreateDateTime DESC";
                     cmd.Parameters.AddWithValue("@postId", postId);
@@ -62,10 +63,8 @@ namespace TabloidMVC.Repositories
                                 Subject = reader.GetString(reader.GetOrdinal("Subject")),
                                 Content = reader.GetString(reader.GetOrdinal("Content")),
                                 CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
-                                UserProfileId = new UserProfile()
-                                {
-                                    DisplayName = reader.GetString(reader.GetOrdinal("DisplayName"))
-                                }
+                                UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
+                                PostId = postId
                             };
 
                             comments.Add(comment);
