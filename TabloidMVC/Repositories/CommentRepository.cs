@@ -64,7 +64,8 @@ namespace TabloidMVC.Repositories
                                 Content = reader.GetString(reader.GetOrdinal("Content")),
                                 CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
                                 UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
-                                PostId = postId
+                                PostId = postId,
+                                DisplayName = reader.GetString(reader.GetOrdinal("DisplayName"))
                             };
 
                             comments.Add(comment);
