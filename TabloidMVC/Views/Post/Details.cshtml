@@ -22,10 +22,10 @@
                 <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Delete">
                     <i class="fas fa-trash"></i>
                 </a>
-                <a asp-action="Comment" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="View Comments">
+                <a asp-controller="Comment" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="View Comments">
                     <i class="fas fa-comments"></i>
                 </a>
-                <a asp-controller="Comment" asp-action="Create" class="btn btn-outline-primary mx-1" title="New Comment">
+                <a asp-controller="Comment" asp-action="Create" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="New Comment">
                     <i class="fas fa-comment"></i>
                 </a>
             </div>
